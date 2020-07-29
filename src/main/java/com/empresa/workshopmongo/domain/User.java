@@ -1,8 +1,11 @@
 package com.empresa.workshopmongo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "user") //indica que é uma coleção do mongoDB e também o collection = collection que foi criado no mongoDB
@@ -14,6 +17,10 @@ public class User implements Serializable{
 	private String id;
 	
 	private String name, email;
+	
+	//indica que se relaciona com uma coleção do mongoDB, o lazy = true indica de só será carregada a lista se solicitada, caso não só carrega o user
+	@DBRef(lazy = true)
+	private List<Post> posts = new ArrayList<>();
 	
 	public User() {
 		
@@ -47,6 +54,10 @@ public class User implements Serializable{
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public List<Post> getPosts() {
+		return posts;
 	}
 
 	@Override
