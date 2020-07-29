@@ -1,5 +1,6 @@
 package com.empresa.workshopmongo.resources;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,23 @@ public class PostResource {
 		
 		text = URL.decodeParam(text);
 		List<Post> list = service.findByTitle(text);
+		return ResponseEntity.ok().body(list);
+	}
+	
+	@RequestMapping(value = "/fullsearch", method = RequestMethod.GET)
+	public ResponseEntity<List<Post>> fullSearch(
+			@RequestParam(value = "text", defaultValue = "") String text,
+			@RequestParam(value = "minDate", defaultValue = "") String minDate,
+			@RequestParam(value = "maxDate", defaultValue = "") String maxDate){
+		
+		//nesse caso a busca é assim no Postman: localhost:8080/posts/fullsearch?text=aproveite&minDate=2018-03-22&maxDate=2018-03-30
+		//nesse caso você pode indicar ou deixar de indicar qualquer data já que as datas tem defaultValue
+		//localhost:8080/posts/fullsearch?text=aproveite
+		
+		text = URL.decodeParam(text);
+		Date min = URL.convertDate(minDate, new Date(0L));//new Date(0L) pega a data inicial do Date que é da década de 70
+		Date max = URL.convertDate(maxDate, new Date());// new Date() pega a data atual do sistema
+		List<Post> list = service.fullSearch(text, min, max);
 		return ResponseEntity.ok().body(list);
 	}
 }
