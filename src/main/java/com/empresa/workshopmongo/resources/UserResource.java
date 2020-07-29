@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.empresa.workshopmongo.domain.User;
 import com.empresa.workshopmongo.dto.UserDTO;
 import com.empresa.workshopmongo.services.UserService;
 
@@ -43,6 +44,13 @@ public class UserResource {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<Void> delete(@PathVariable String id){
 		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public ResponseEntity<Void> update(@RequestBody User obj, @PathVariable String id){
+		obj.setId(id);
+		service.update(obj);
 		return ResponseEntity.noContent().build();
 	}
 }
